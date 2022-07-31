@@ -41,7 +41,7 @@ def image_resize(image_folder_path, resolution=(1080, 1920)):
             os.remove(i)
 
 
-def save_video(image_folder_path, image_time=4, fps=24):
+def save_video(image_folder_path, video_folder_path, image_time=4, fps=24):
     images = [f"{image_folder_path}\\{path}" for path in os.listdir(image_folder_path)]
     clips = []
     for i in range(len(images)):
@@ -51,26 +51,26 @@ def save_video(image_folder_path, image_time=4, fps=24):
 
     video_clip = concatenate_videoclips(clips, method='compose')
 
-    video_clip.write_videofile(r".\video-output.mp4", fps=fps, remove_temp=True, codec="libx264",
+    video_clip.write_videofile(rf"{video_folder_path}/video-output.mp4", fps=fps, remove_temp=True, codec="libx264",
                                audio_codec="aac")
 
 
-def sub_video():
-    clip = VideoFileClip(r".\video-output.mp4")
+def sub_video(video_folder_path):
+    clip = VideoFileClip(rf"{video_folder_path}/video-output.mp4")
 
     for i in range(0, int(clip.duration), 60):
-        videoname = f"./videos/video-output_{i}.mp4"
+        videoname = f"{video_folder_path}/video-output_{i}.mp4"
         if not round(clip.duration) - i < 60:
-            ffmpeg_extract_subclip(r"E:\Freelance\Photos to Video\video-output.mp4", i, i + 60, f"videos/video_{i}.mp4")
+            ffmpeg_extract_subclip(rf"{video_folder_path}/video-output.mp4", i, i + 60, f"{video_folder_path}/video_{i}.mp4")
         else:
-            ffmpeg_extract_subclip(r"E:\Freelance\Photos to Video\video-output.mp4", i, round(clip.duration),
-                                   f"videos/video_{i}.mp4")
+            ffmpeg_extract_subclip(rf"{video_folder_path}/video-output.mp4", i, round(clip.duration),
+                                   f"{video_folder_path}/video_{i}.mp4")
 
 
 path = json.load(open('config.json', 'r'))["Image Folder Path"]
-
+video_path = json.load(open('config.json', 'r'))["Video Folder Path"]
 filter_image(path)
 image_resize(path)
-save_video(path)
-sub_video()
+save_video(path, video_path)
+sub_video(video_path)
 
