@@ -19,7 +19,9 @@ python pinterest-downloader.py
 ```
 And input UserName/BoardName
 
-Type into config.json Image Folder Path
+<b><u>Type into config.json Image Folder Path</u></b>  
+
+<b><u>Type into config.json Video Folder Path</u></b>
 
 For create Videos
 
